@@ -26,7 +26,6 @@ public class Homework1 {
      *  Returns the first country name that contains the word "island" ignoring case.
      */
     public Optional<String> streamPipeline2() {
-        // TODO
         return countries.stream().map(Country::getName).filter(name -> name.toLowerCase().contains("island")).findFirst();
     }
 
@@ -49,7 +48,7 @@ public class Homework1 {
      * Prints the names of the first ten least populous countries.
      */
     public void streamPipeline5() {
-        countries.stream().mapToLong(Country::getPopulation).sorted().limit(10L).forEach(System.out::println);
+        countries.stream().sorted(Comparator.comparing(Country::getPopulation)).limit(10L).map(Country::getName).forEach(System.out::println);
     }
 
     /**
@@ -77,7 +76,6 @@ public class Homework1 {
      * Returns the number of countries with no Spanish country name translation (the Spanish language is identified by the language code "es").
      */
     public long streamPipeline9() {
-        // TODO
         return countries.stream().map(Country::getTranslations).filter(translations->!(translations.containsKey("es"))).count();
     }
 
