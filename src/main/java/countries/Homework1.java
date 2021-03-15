@@ -111,7 +111,7 @@ public class Homework1 {
      * Returns the largest country with non-null area.
      */
     public Optional<Country> streamPipeline14() {
-        return countries.stream().filter(country -> country.getArea()!=null).sorted(Comparator.comparing(Country::getArea).reversed()).findFirst();
+        return countries.stream().filter(country -> country.getArea()!=null).max(Comparator.comparing(Country::getArea));
     }
 
     /**
