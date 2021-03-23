@@ -2,11 +2,13 @@ package countries;
 
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/** @noinspection unused*/
 public class Homework2 {
 
-    private List<Country> countries;
+    private final List<Country> countries;
 
     public Homework2() {
         countries = new CountryRepository().getAll();
@@ -16,9 +18,7 @@ public class Homework2 {
      * Returns the longest country name translation.
      */
     public Optional<String> streamPipeline1() {
-        return countries.stream().map(Country::getTranslations).map(t -> {
-            return t.keySet().stream().map(t::get).toArray();
-        }).flatMap(Stream::of).map(s -> Objects.toString(s, "")).max(Comparator.comparingInt(String::length));
+        return countries.stream().map(Country::getTranslations).map(t -> t.keySet().stream().map(t::get).toArray()).flatMap(Stream::of).map(s -> Objects.toString(s, "")).max(Comparator.comparingInt(String::length));
     }
 
     /**
@@ -55,7 +55,7 @@ public class Homework2 {
      * Returns whether there exists at least one capital that is a palindrome.
      */
     public boolean streamPipeline6() {
-        return countries.stream().map(Country::getCapital).map(String::toLowerCase).filter(s -> s.equals( new StringBuilder(s).reverse().toString())).count()>0;
+        return countries.stream().map(Country::getCapital).map(String::toLowerCase).anyMatch(s -> s.equals(new StringBuilder(s).reverse().toString()));
     }
 
     /**
@@ -76,8 +76,8 @@ public class Homework2 {
      * Returns a map that contains for each character the number of occurrences in country names ignoring case.
      */
     public Map<Character, Long> streamPipeline9() {
-        // TODO
-        return null;
+
+        return countries.stream().map(Country::getName).flatMap(names->names.toLowerCase().chars().mapToObj(ints-> (char) ints)).collect(Collectors.groupingBy(Character::charValue, Collectors.counting()));
     }
 
     /**
