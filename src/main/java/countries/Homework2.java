@@ -1,16 +1,8 @@
 package countries;
 
-import java.io.IOException;
-
-import java.math.BigDecimal;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static java.util.stream.Collectors.*;
-
 import java.time.ZoneId;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class Homework2 {
 
@@ -24,62 +16,60 @@ public class Homework2 {
      * Returns the longest country name translation.
      */
     public Optional<String> streamPipeline1() {
-        // TODO
-        return null;
+        return countries.stream().map(Country::getTranslations).map(t -> {
+            return t.keySet().stream().map(t::get).toArray();
+        }).flatMap(Stream::of).map(s -> Objects.toString(s, "")).max(Comparator.comparingInt(String::length));
     }
 
     /**
      * Returns the longest Italian (i.e., {@code "it"}) country name translation.
      */
     public Optional<String> streamPipeline2() {
-        // TODO
-        return null;
+        return countries.stream().map(Country::getTranslations).map(t -> t.get("it")).map(s -> Objects.toString(s, "")).max(Comparator.comparingInt(String::length));
     }
 
     /**
      * Prints the longest country name translation together with its language code in the form language=translation.
      */
     public void streamPipeline3() {
-        // TODO
+        System.out.println(
+                countries.stream().map(Country::getTranslations).map(Map::entrySet).flatMap(Set::stream).max(Comparator.comparingInt(e -> e.getValue().length())).get()
+        );
     }
 
     /**
      * Prints single word country names (i.e., country names that do not contain any space characters).
      */
     public void streamPipeline4() {
-        // TODO
+        countries.stream().map(Country::getName).filter(n->n.indexOf(' ')==-1).forEach(System.out::println);
     }
 
     /**
      * Returns the country name with the most number of words.
      */
     public Optional<String> streamPipeline5() {
-        // TODO
-        return null;
+        return countries.stream().map(Country::getName).max(Comparator.comparingInt(n->n.split(" ").length));
     }
 
     /**
      * Returns whether there exists at least one capital that is a palindrome.
      */
     public boolean streamPipeline6() {
-        // TODO
-        return false;
+        return countries.stream().map(Country::getCapital).map(String::toLowerCase).filter(s -> s.equals( new StringBuilder(s).reverse().toString())).count()>0;
     }
 
     /**
      * Returns the country name with the most number of {@code 'e'} characters ignoring case.
      */
     public Optional<String> streamPipeline7() {
-        // TODO
-        return null;
+        return countries.stream().map(Country::getName).max(Comparator.comparingInt(n -> (int) n.toLowerCase().chars().filter(c -> c == 'e').count()));
     }
 
     /**
-     *  Returns the capital with the most number of English vowels (i.e., {@code 'a'}, {@code 'e'}, {@code 'i'}, {@code 'o'}, {@code 'u'}).
+     * Returns the capital with the most number of English vowels (i.e., {@code 'a'}, {@code 'e'}, {@code 'i'}, {@code 'o'}, {@code 'u'}).
      */
     public Optional<String> streamPipeline8() {
-        // TODO
-        return null;
+        return countries.stream().map(Country::getCapital).max(Comparator.comparingLong(capital->capital.toLowerCase().chars().filter(c->"aeiou".indexOf(c)!=-1).count()));
     }
 
     /**
@@ -131,7 +121,7 @@ public class Homework2 {
     }
 
     /**
-     *  Returns a map of country name-population density pairs.
+     * Returns a map of country name-population density pairs.
      */
     public Map<String, Double> streamPipeline15() {
         // TODO
